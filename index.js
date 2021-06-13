@@ -1,13 +1,12 @@
 const express = require('express');
 const app = express();
-const cors = require('cors');
-const port = 4000;
+// const cors = require('cors');
 require('dotenv').config();
 
 require('./database/db.connect')
 
 app.use(express.json())
-app.use(cors)
+// app.use(cors)
 
 app.get('/',(req,res)=>{
   res.json("Welcome to the CryptoTube Video Library Server. This project is developed by Shahid Rizwan")
