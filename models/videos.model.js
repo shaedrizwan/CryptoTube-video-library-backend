@@ -6,14 +6,14 @@ const videoSchema = new mongoose.Schema({
         required:["Video title required"]
     },
     youtube_url:{
-        type: mongoose.SchemaTypes.Url,
+        type: String,
         required: ["Video url required"]
     },
     description:{
         type: String
     },
     thumbnail:{
-        type: mongoose.SchemaType.apply.Url
+        type: String
     },
     slug:{
         type:String
@@ -22,12 +22,11 @@ const videoSchema = new mongoose.Schema({
         type:String
     },
     published_date:{
-        type: Date
+        type: String
     }
 },{
     timestamps:true
 })
 
-const Videos = mongoose.model("Videos", watchlaterSchema);
 
-module.exports = {Videos};
+module.exports = mongoose.model("Video", videoSchema);

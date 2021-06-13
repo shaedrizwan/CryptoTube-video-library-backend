@@ -1,12 +1,18 @@
 const express = require('express');
 const app = express();
-// const cors = require('cors');
-require('dotenv').config();
+const Video = require('./models/videos.model')
+const {initializeDB} = require('./database/db.connect')
 
+require('dotenv').config();
 require('./database/db.connect')
 
+initializeDB()
 app.use(express.json())
-// app.use(cors)
+
+const videoRoute = require('./routes/videoRoute')
+
+
+app.use('/video',videoRoute)
 
 app.get('/',(req,res)=>{
   res.json("Welcome to the CryptoTube Video Library Server. This project is developed by Shahid Rizwan")

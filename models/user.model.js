@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { WatchLater } = require("./watchlater.model");
+const WatchLater = require("./watchlater.model");
 
 const userSchema = new mongoose.Schema({
     firstname:{
@@ -27,5 +27,4 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-const User = mongoose.model("User",userSchema)
-module.exports = {User};
+module.exports = mongoose.model("User",userSchema)
