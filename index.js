@@ -1,11 +1,11 @@
 const express = require('express');
 const app = express();
-const Video = require('./models/videos.model')
+const cors = require('cors')
 const {initializeDB} = require('./database/db.connect')
 
 require('dotenv').config();
-require('./database/db.connect')
 
+app.use(cors())
 initializeDB()
 app.use(express.json())
 
