@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 const WatchLater = require("./watchlater.model");
 
-const userSchema = new mongoose.Schema({
+const Schema = mongoose.Schema
+
+const userSchema = new Schema({
     firstname:{
         type: String,
         required:["First name required"]

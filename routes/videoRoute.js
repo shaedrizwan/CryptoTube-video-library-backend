@@ -1,5 +1,4 @@
 const express = require('express');
-const videosModel = require('../models/videos.model');
 const router = express.Router();
 const Video = require('../models/videos.model')
 const {extend} = require('lodash')
@@ -9,7 +8,7 @@ router.route('/')
 .get(async (req,res)=>{
     try{
         const data = await Video.find({})
-        res.json({success:true,videos:data})
+        res.json({route:"video",success:true,videos:data})
     }
     catch(err){
         res.status(500).json({success:false,message:err.message})

@@ -2,9 +2,11 @@ const mongoose = require("mongoose")
 const Video = require("./videos.model")
 const User = require("./user.model")
 
-const watchlaterSchema = new mongoose.Schema({
-    userId: { type: mongoose.Types.ObjectId, ref: User },
-    videoIds: [{ type: mongoose.Types.ObjectId, ref: Videos }],
+const Schema = mongoose.Schema
+
+const watchlaterSchema = new Schema({
+    userId: String,
+    videoIds: [{ type: Schema.Types.ObjectId, ref: Video }]
   });
   
   
