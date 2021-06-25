@@ -3,42 +3,6 @@ const router = express.Router();
 const User = require("../models/user.model")
 const checkUser = require("../middlewares/auth.middleware")
 
-const data = {
-    firstname:"Rizwan",
-    lastname:"Shahid",
-    email:"shaedrizwan@gmail.com",
-    username:"shaedrizwan",
-    password:"Rizwan"
-}
-router.route("/")
-    .get((req,res)=>{
-        res.send("User route is working")
-    })
-    .post(async(req,res)=>{
-        try{
-            const data = req.body
-            const newUser = new User(data)
-            const updatedUser = await newUser.save()
-            res.json({success:true,user:updatedUser})
-        }
-        catch(err){
-            res.json({success:false,message:err.message})
-        }
-    })
-
-router.route("/:userId")
-    .get(async (req,res)=>{
-        try{
-            const {userId} = req.params
-            const user = await User.findById(userId)
-            user.password = undefined
-            res.json({success:true,user})
-        }
-        catch(err){
-            res.json({success:false,message:err.message})
-        }
-    })
-
 router.use('/login',checkUser)
 
 router.route("/login")
@@ -46,6 +10,20 @@ router.route("/login")
         const {username} = req.user;
         res.json({success:true,username})
     })
+
+
+router.route('/signup')
+    .post( async (req,res)=>{
+        try{
+            const user = req.body;
+            const newUser = new User(user)
+            const updatedUser = await newUser.save()
+            res.json({sucess:true,updatedUser})
+        }catch(err){
+            res.status(500).json({success:false,error:err.message,message:"Failed to add new User"})
+        }
+    })
+
 
 
 
