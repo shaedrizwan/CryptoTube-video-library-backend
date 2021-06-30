@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const WatchLater = require("./watchlater.model");
+const mongoose = require("mongoose")
+const Video = require("./videos.model");
 
 const Schema = mongoose.Schema
 
@@ -9,7 +9,7 @@ const userSchema = new Schema({
         required:["First name required"]
     },
     lastName:{
-        type:String,
+        type: String,
     },
     email:{
         type: String,
@@ -23,10 +23,13 @@ const userSchema = new Schema({
         type:String,
         required:["Password required"]
     },
-    watchlater:{
-        type: Schema.Types.ObjectId,
-        ref: WatchLater
-    }
+    watchlater:[{ type: Schema.Types.ObjectId, ref: Video }],
+    likedvideos:[{ type: Schema.Types.ObjectId, ref: Video }]
+    
+    // {
+    //     type: Schema.Types.ObjectId,
+    //     ref: WatchLater
+    // }
 })
 
 module.exports = mongoose.model("User",userSchema)
