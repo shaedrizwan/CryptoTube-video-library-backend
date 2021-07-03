@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const User = require("../models/user.model")
-const {checkUser} = require("../middlewares/auth.middleware")
+const {checkUser, verifyAuth} = require("../middlewares/auth.middleware")
 const jwt = require("jsonwebtoken")
 
 router.use('/login',checkUser)
 router.route("/login")
     .post((req,res)=>{
         const user = req.user;
-        const token = jwt.sign({usedId:user._id},process.env.TOKEN_SECRET,{expiresIn:'24h'})
+        const token = jwt.sign({userId:user._id},process.env.TOKEN_SECRET,{expiresIn:'24h'})
         res.json({success:true,user:user.username,token})
     })
 
@@ -33,13 +33,13 @@ router.route('/liked-videos')
 
 
 
-router.use('/addToWatchlater',checkUser)
+router.use('/addToWatchlater',verifyAuth)
 
 router.route('/addToWatchlater')
     .post(async (req,res)=>{
         try{
-            user = req.user;
-            updatedUser = await User.findByIdAndUpdate({_id:user._id},{
+            userId = req.user;
+            updatedUser = await User.findByIdAndUpdate({_id:userId},{
                 $addToSet:{
                     watchlater:"60c5e6ce4d5195523c8690aa"
                 }
@@ -50,7 +50,7 @@ router.route('/addToWatchlater')
         }
     })
 
-router.route('/see',checkUser)
+router.route('/see')
     .get(async (req,res)=>{
         try{
             user = User.find({});
@@ -61,12 +61,13 @@ router.route('/see',checkUser)
         }
     })
 
-router.use('/watchlater',checkUser)
+router.use('/watchlater',verifyAuth)
 router.route('/watchlater')
     .get(async (req,res)=>{
         try{
-            user = req.user
-            fullUser = await User.findOne({_id:user._id}).populate('watchlater')
+            userId = req.user
+            console.log(req.user)
+            fullUser = await User.findOne({_id:userId}).populate('watchlater')
             res.json({success:true,watchlater:fullUser.watchlater})
         }catch(err){
             res.json({success:false,message:err.message})
