@@ -1,6 +1,6 @@
 const User = require("../models/user.model")
 const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
+// const jwt = require("jsonwebtoken")
 
 const checkUser = async(req,res,next) =>{
     try{
@@ -23,16 +23,16 @@ const checkUser = async(req,res,next) =>{
     }
 }
 
-const verifyAuth = (req,res,next) =>{
-    const token = req.headers.authorization;
-    try{
-        const decoded = jwt.verify(token,process.env.TOKEN_SECRET);
-        req.user = decoded.userId;
-        return next();
-    } catch(err){
-        return res.json({success:false,message:"Unauthorized access"})
-    }
-}
+// const verifyAuth = (req,res,next) =>{
+//     const token = req.headers.authorization;
+//     try{
+//         const decoded = jwt.verify(token,process.env.TOKEN_SECRET);
+//         req.user = decoded.userId;
+//         return next();
+//     } catch(err){
+//         return res.json({success:false,message:"Unauthorized access"})
+//     }
+// }
 
 
 module.exports = {checkUser,verifyAuth};
