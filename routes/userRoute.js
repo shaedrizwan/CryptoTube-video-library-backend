@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require("../models/user.model")
-const checkUser = require("../middlewares/auth.middleware")
+const {checkUser, verifyAuth} = require("../middlewares/auth.middleware")
 const jwt = require("jsonwebtoken")
 
 router.use('/login',checkUser)
@@ -33,7 +33,7 @@ router.route('/liked-videos')
 
 
 
-router.use('/addToWatchlater',checkUser)
+router.use('/addToWatchlater',verifyAuth)
 
 router.route('/addToWatchlater')
     .post(async (req,res)=>{
@@ -61,7 +61,7 @@ router.route('/see',checkUser)
         }
     })
 
-router.use('/watchlater',checkUser)
+router.use('/watchlater',verifyAuth)
 router.route('/watchlater')
     .get(async (req,res)=>{
         try{
