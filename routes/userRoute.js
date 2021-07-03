@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 const User = require("../models/user.model")
 const {checkUser, verifyAuth} = require("../middlewares/auth.middleware")
-const jwt = require("jsonwebtoken")
+// const jwt = require("jsonwebtoken")
 
 router.use('/login',checkUser)
 router.route("/login")
     .post((req,res)=>{
         const user = req.user;
-        const token = jwt.sign({usedId:user._id},process.env.TOKEN_SECRET,{expiresIn:'24h'})
-        res.json({success:true,user:user.username,token})
+        // const token = await jwt.sign({usedId:user._id},process.env.TOKEN_SECRET,{expiresIn:'24h'})
+        res.json({success:true,user:user.username})
     })
 
 
@@ -33,7 +33,7 @@ router.route('/liked-videos')
 
 
 
-router.use('/addToWatchlater',verifyAuth)
+router.use('/addToWatchlater',checkUser)
 
 router.route('/addToWatchlater')
     .post(async (req,res)=>{
@@ -61,7 +61,7 @@ router.route('/see',checkUser)
         }
     })
 
-router.use('/watchlater',verifyAuth)
+router.use('/watchlater',checkUser)
 router.route('/watchlater')
     .get(async (req,res)=>{
         try{
