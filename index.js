@@ -4,9 +4,15 @@ const cors = require('cors')
 const {initializeDB} = require('./database/db.connect')
 
 require('dotenv').config();
-app.use(cors())
 initializeDB()
 app.use(express.json())
+
+let corsOption = {
+  origin:"https://netlify.com",
+  optionSuccessStatus:200
+}
+
+app.use(cors(corsOption))
 
 const videoRoute = require('./routes/videoRoute')
 const userRoute = require("./routes/userRoute")
