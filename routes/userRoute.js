@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const User = require("../models/user.model")
-const {checkUser, verifyAuth} = require("../middlewares/auth.middleware")
-// const jwt = require("jsonwebtoken")
+const {checkUser} = require("../middlewares/auth.middleware")
+const jwt = require("jsonwebtoken")
 
 router.use('/login',checkUser)
 router.route("/login")
     .post((req,res)=>{
         const user = req.user;
-        // const token = await jwt.sign({usedId:user._id},process.env.TOKEN_SECRET,{expiresIn:'24h'})
-        res.json({success:true,user:user.username})
+        const token = jwt.sign({usedId:user._id},process.env.TOKEN_SECRET,{expiresIn:'24h'})
+        res.json({success:true,user:user.username,token})
     })
 
 
