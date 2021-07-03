@@ -8,7 +8,7 @@ initializeDB()
 app.use(express.json())
 
 let corsOption = {
-  origin:"https://netlify.com",
+  origin:"https://netlify.app",
   optionSuccessStatus:200
 }
 
