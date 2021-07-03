@@ -38,11 +38,11 @@ router.use('/addToWatchlater',verifyAuth)
 router.route('/addToWatchlater')
     .post(async (req,res)=>{
         try{
-            userId = req.user;
-            console.log(userId)
+            const userId = req.user;
+            const {videoId} = req.body;
             updatedUser = await User.findByIdAndUpdate({_id:userId},{
                 $addToSet:{
-                    watchlater:"60c5e6ce4d5195523c8690aa"
+                    watchlater:videoId
                 }
             })
             res.json({success:true,updatedUser:updatedUser.watchlater})
