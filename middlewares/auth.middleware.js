@@ -35,4 +35,4 @@ const checkUser = async(req,res,next) =>{
 // }
 
 
-module.exports = {checkUser,verifyAuth};
+module.exports = {checkUser};
