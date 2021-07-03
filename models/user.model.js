@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const Video = require("./videos.model");
+const bcrypt = require("bcrypt")
 
 const Schema = mongoose.Schema
 
@@ -25,11 +26,17 @@ const userSchema = new Schema({
     },
     watchlater:[{ type: Schema.Types.ObjectId, ref: Video }],
     likedvideos:[{ type: Schema.Types.ObjectId, ref: Video }]
-    
-    // {
-    //     type: Schema.Types.ObjectId,
-    //     ref: WatchLater
-    // }
+})
+
+userSchema.pre('save',async function (next){
+    try{
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(this.password,salt);
+        this.password = hashedPassword;
+        next()
+    }catch(err){
+        next(err)
+    }
 })
 
 module.exports = mongoose.model("User",userSchema)
