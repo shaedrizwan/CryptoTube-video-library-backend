@@ -39,6 +39,7 @@ router.route('/addToWatchlater')
     .post(async (req,res)=>{
         try{
             userId = req.user;
+            console.log(userId)
             updatedUser = await User.findByIdAndUpdate({_id:userId},{
                 $addToSet:{
                     watchlater:"60c5e6ce4d5195523c8690aa"
@@ -50,16 +51,6 @@ router.route('/addToWatchlater')
         }
     })
 
-router.route('/see')
-    .get(async (req,res)=>{
-        try{
-            user = User.find({});
-            fullUser = await user.populate('watchlater')
-            res.json({success:true,fullUser})
-        }catch(err){
-            res.json({success:false,message:err.message})
-        }
-    })
 
 router.use('/watchlater',verifyAuth)
 router.route('/watchlater')
@@ -73,6 +64,18 @@ router.route('/watchlater')
             res.json({success:false,message:err.message})
         }
     })
+
+    router.route('/see')
+    .get(async (req,res)=>{
+        try{
+            user = User.find({});
+            fullUser = await user.populate('watchlater')
+            res.json({success:true,fullUser})
+        }catch(err){
+            res.json({success:false,message:err.message})
+        }
+    })
+
 
 
 
