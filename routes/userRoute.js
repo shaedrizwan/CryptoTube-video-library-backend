@@ -60,13 +60,29 @@ router.route('/watchlater')
         }
     })
 
+router.use('/removeFromWatchlater',verifyAuth)
+router.route('/removeFromWatchLater')
+    .post(async(req,res)=>{
+        try{
+            const userId = req.user;
+            const {videoId} = req.body;
+            updatedUser = await User.findByIdAndUpdate({_id:userId},{
+                $pull:{
+                    watchlater:videoId
+                }
+            })
+            res.json({success:true,message:'Video successfully removed from Watchlater'})
+        }catch(err){
+            res.json({success:false,message:'Failed to remove the video',error:err.message})
+        }
+    })
+
 
 router.use('/likedvideos',verifyAuth)
 router.route('/likedvideos')
     .get(async (req,res)=>{
         try{
             userId = req.user
-            console.log(req.user)
             fullUser = await User.findOne({_id:userId}).populate('likedvideos')
             res.json({success:true,likedvideos:fullUser.likedvideos})
         }catch(err){
@@ -92,6 +108,24 @@ router.route('/addToLikedVideos')
             res.json({success:false,message:err.message})
         }
     })
+
+router.use('/removeFromLikedVideos',verifyAuth)
+router.route('/removeFromLikedVideos')
+    .post(async(req,res)=>{
+        try{
+            const userId = req.user;
+            const {videoId} = req.body;
+            updatedUser = await User.findByIdAndUpdate({_id:userId},{
+                $pull:{
+                likedvideos:videoId
+                }
+            })
+            res.json({success:true,likedvideos:updatedUser.likedvideos,message:"Removed from liked videos successfully!"})
+        }catch(err){
+            res.json({success:false,message:"Failed to remove the video",error:err.message})
+        }
+    })
+
 
 
 
