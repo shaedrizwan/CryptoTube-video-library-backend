@@ -25,11 +25,6 @@ router.route('/signup')
         }
     })
 
-router.route('/liked-videos')
-    .get((req,res)=>{
-        res.send("Liked videos route is working")
-    })
-
 
 
 
@@ -65,12 +60,34 @@ router.route('/watchlater')
         }
     })
 
-    router.route('/see')
+
+router.use('/likedvideos',verifyAuth)
+router.route('/likedvideos')
     .get(async (req,res)=>{
         try{
-            user = User.find({});
-            fullUser = await user.populate('watchlater')
-            res.json({success:true,fullUser})
+            userId = req.user
+            console.log(req.user)
+            fullUser = await User.findOne({_id:userId}).populate('likedvideos')
+            res.json({success:true,likedvideos:fullUser.likedvideos})
+        }catch(err){
+            res.json({success:false,message:err.message})
+        }
+    })
+
+
+router.use('/addToLikedVideos',verifyAuth)
+
+router.route('/addToLikedVideos')
+    .post(async (req,res)=>{
+        try{
+            const userId = req.user;
+            const {videoId} = req.body;
+            updatedUser = await User.findByIdAndUpdate({_id:userId},{
+                $addToSet:{
+                    likedvideos:videoId
+                }
+            })
+            res.json({success:true,updatedUser:updatedUser.likedvideos})
         }catch(err){
             res.json({success:false,message:err.message})
         }
