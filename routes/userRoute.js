@@ -130,15 +130,16 @@ router.route('/removeFromLikedVideos')
 router.use('/createPlaylist',verifyAuth)
 
 router.route('/createPlaylist')
-    .get(async (req,res)=>{
+    .post(async (req,res)=>{
         try{
             const userId = req.user;
+            const {playlistName} = req.body;
+            let pushObj = {}
+            pushObj['playlist.'+playlistName] = []
             updatedUser = await User.findByIdAndUpdate({_id:userId},{
-                $set:{
-                    "playlist.finalplay":[]
-                }
+                $set:pushObj
             })
-            res.json({success:true,updatedUser:updatedUser.likedvideos})
+            res.json({success:true,updatedPlaylist:updatedUser.playlist})
         }catch(err){
             res.json({success:false,message:err.message})
         }
@@ -156,7 +157,7 @@ router.route('/addToPlaylist')
             updatedUser = await User.findByIdAndUpdate({_id:userId},{
                     $addToSet: pushObj
             })
-            res.json({success:true,updatedUser:updatedUser.playlist})
+            res.json({success:true,updatedPlaylist:updatedUser.playlist})
         }catch(err){
             res.json({success:false,message:err.message})
         }
