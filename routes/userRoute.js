@@ -161,7 +161,7 @@ router.route('/addToPlaylist')
         }
     })
 
-router.use('/playlist',checkUser)
+router.use('/playlist',verifyAuth)
 router.route('/playlist')
     .get(async(req,res)=>{
         try{
