@@ -127,6 +127,53 @@ router.route('/removeFromLikedVideos')
     })
 
 
+router.use('/createPlaylist',verifyAuth)
+
+router.route('/createPlaylist')
+    .get(async (req,res)=>{
+        try{
+            const userId = req.user;
+            updatedUser = await User.findByIdAndUpdate({_id:userId},{
+                $set:{
+                    "playlist.finalplay":[]
+                }
+            })
+            res.json({success:true,updatedUser:updatedUser.likedvideos})
+        }catch(err){
+            res.json({success:false,message:err.message})
+        }
+    })
+
+router.use('/addToPlaylist',verifyAuth)
+
+router.route('/addToPlaylist')
+    .get(async (req,res)=>{
+        try{
+            const userId = req.user;
+            updatedUser = await User.findByIdAndUpdate({_id:userId},{
+                    $addToSet:{
+                        "playlist.finalplay":"This is working"
+                    }
+            })
+            res.json({success:true,updatedUser:updatedUser.likedvideos})
+        }catch(err){
+            res.json({success:false,message:err.message})
+        }
+    })
+
+router.use('/playlist',checkUser)
+router.route('/playlist')
+    .get(async(req,res)=>{
+        try{
+            userId = req.user;
+            user = await User.findOne({_id:userId})
+            res.json({success:true,playlist:user.playlist})
+        }catch(err){
+            res.json({success:false,message:"Something went wrong",error:err.message})
+        }
+    })
+
+
 
 
 

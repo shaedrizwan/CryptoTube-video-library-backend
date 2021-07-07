@@ -25,7 +25,8 @@ const userSchema = new Schema({
         required:["Password required"]
     },
     watchlater:[{ type: Schema.Types.ObjectId, ref: Video }],
-    likedvideos:[{ type: Schema.Types.ObjectId, ref: Video }]
+    likedvideos:[{ type: Schema.Types.ObjectId, ref: Video }],
+    playlist:{}
 })
 
 userSchema.pre('save',async function (next){
