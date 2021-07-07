@@ -147,15 +147,16 @@ router.route('/createPlaylist')
 router.use('/addToPlaylist',verifyAuth)
 
 router.route('/addToPlaylist')
-    .get(async (req,res)=>{
+    .post(async (req,res)=>{
         try{
             const userId = req.user;
+            const {playlist,videoId} = req.body;
+            let pushObj = {}
+            pushObj['playlist.'+playlist] = videoId
             updatedUser = await User.findByIdAndUpdate({_id:userId},{
-                    $addToSet:{
-                        "playlist.finalplay":"This is working"
-                    }
+                    $addToSet: pushObj
             })
-            res.json({success:true,updatedUser:updatedUser.likedvideos})
+            res.json({success:true,updatedUser:updatedUser.playlist})
         }catch(err){
             res.json({success:false,message:err.message})
         }
