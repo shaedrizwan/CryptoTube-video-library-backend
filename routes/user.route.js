@@ -8,6 +8,7 @@ router.use('/login',checkUser)
 router.route("/login")
     .post((req,res)=>{
         const user = req.user;
+        console.log(user)
         const token = jwt.sign({userId:user._id},process.env.TOKEN_SECRET,{expiresIn:'24h'})
         res.json({success:true,user:user.username,token})
     })
@@ -137,7 +138,6 @@ router.route('/createPlaylist')
             let pushObj = {
                 playlistName: playlistName
             }
-            // pushObj['playlist.'+playlistName] = []
             updatedUser = await User.findByIdAndUpdate({_id:userId},{
                 $addToSet:{
                     playlist: pushObj
@@ -152,19 +152,16 @@ router.route('/createPlaylist')
 router.use('/addToPlaylist',verifyAuth)
 
 router.route('/addToPlaylist')
-    .post(async (req,res)=>{
+    .post(async(req,res)=>{
         try{
             const userId = req.user;
-            const {playlist,videoId} = req.body;
-            pushObj[playlist] = videoId
-            updatedUser = await User.findByIdAndUpdate({_id:userId},{
-                    $addToSet: {
-                        playlist
-                    }
-            })
-            res.json({success:true,updatedPlaylist:updatedUser.playlist})
+            const {playlist,videoId} = req.body
+            user = await User.findOne({_id:userId})
+            upUser = user.playlist.find(item=>item.playlistName === playlist).videos.push(videoId)
+            updatedUser = await user.save()
+            res.json({success:true,message:"Video added to playlist"})
         }catch(err){
-            res.json({success:false,message:err.message})
+            res.json({success:false,message:"Something went wrong",error:err.message})
         }
     })
 
@@ -180,22 +177,6 @@ router.route('/playlist')
             res.json({success:false,message:"Something went wrong",error:err.message})
         }
     })
-
-router.use('/ptest',verifyAuth)
-router.route('/ptest')
-    .post(async(req,res)=>{
-        try{
-            const userId = req.user;
-            const {playlist,videoId} = req.body
-            user = await User.findOne({_id:userId})
-            upUser = user.playlist.find(item=>item.playlistName === playlist).videos.push(videoId)
-            updatedUser = await user.save()
-            res.json({success:true,message:"Video added to playlist"})
-        }catch(err){
-            res.json({success:false,message:"Something went wrong",error:err.message})
-        }
-    })
-
 
 
 
