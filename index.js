@@ -9,8 +9,8 @@ app.use(express.json())
 
 app.use(cors())
 
-const videoRoute = require('./routes/videoRoute')
-const userRoute = require("./routes/userRoute")
+const videoRoute = require('./routes/video.route')
+const userRoute = require("./routes/user.route")
 
 
 app.use('/video',videoRoute)

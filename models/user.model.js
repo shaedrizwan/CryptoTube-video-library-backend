@@ -4,6 +4,11 @@ const bcrypt = require("bcryptjs")
 
 const Schema = mongoose.Schema
 
+const playlistSchema = new Schema({
+    playlistName:String,
+    videos:[{ type: Schema.Types.ObjectId, ref: Video }]
+})
+
 const userSchema = new Schema({
     firstname:{
         type: String,
@@ -26,7 +31,7 @@ const userSchema = new Schema({
     },
     watchlater:[{ type: Schema.Types.ObjectId, ref: Video }],
     likedvideos:[{ type: Schema.Types.ObjectId, ref: Video }],
-    playlist:{}
+    playlist:[playlistSchema]
 })
 
 userSchema.pre('save',async function (next){

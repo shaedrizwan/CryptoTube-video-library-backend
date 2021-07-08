@@ -134,10 +134,14 @@ router.route('/createPlaylist')
         try{
             const userId = req.user;
             const {playlistName} = req.body;
-            let pushObj = {}
-            pushObj['playlist.'+playlistName] = []
+            let pushObj = {
+                playlistName: playlistName
+            }
+            // pushObj['playlist.'+playlistName] = []
             updatedUser = await User.findByIdAndUpdate({_id:userId},{
-                $set:pushObj
+                $addToSet:{
+                    playlist: pushObj
+                }
             })
             res.json({success:true,updatedPlaylist:updatedUser.playlist})
         }catch(err){
@@ -152,10 +156,11 @@ router.route('/addToPlaylist')
         try{
             const userId = req.user;
             const {playlist,videoId} = req.body;
-            let pushObj = {}
-            pushObj['playlist.'+playlist] = videoId
+            pushObj[playlist] = videoId
             updatedUser = await User.findByIdAndUpdate({_id:userId},{
-                    $addToSet: pushObj
+                    $addToSet: {
+                        playlist
+                    }
             })
             res.json({success:true,updatedPlaylist:updatedUser.playlist})
         }catch(err){
@@ -169,7 +174,23 @@ router.route('/playlist')
         try{
             userId = req.user;
             user = await User.findOne({_id:userId})
+            console.log(user)
             res.json({success:true,playlist:user.playlist})
+        }catch(err){
+            res.json({success:false,message:"Something went wrong",error:err.message})
+        }
+    })
+
+router.use('/ptest',verifyAuth)
+router.route('/ptest')
+    .post(async(req,res)=>{
+        try{
+            const userId = req.user;
+            const {playlist,videoId} = req.body
+            user = await User.findOne({_id:userId})
+            upUser = user.playlist.find(item=>item.playlistName === playlist).videos.push(videoId)
+            updatedUser = await user.save()
+            res.json({success:true,message:"Video added to playlist"})
         }catch(err){
             res.json({success:false,message:"Something went wrong",error:err.message})
         }
