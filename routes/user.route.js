@@ -170,8 +170,7 @@ router.route('/playlist')
     .get(async(req,res)=>{
         try{
             userId = req.user;
-            user = await User.findOne({_id:userId})
-            console.log(user)
+            user = await User.findOne({_id:userId}).populate('playlist.videos')
             res.json({success:true,playlist:user.playlist})
         }catch(err){
             res.json({success:false,message:"Something went wrong",error:err.message})
