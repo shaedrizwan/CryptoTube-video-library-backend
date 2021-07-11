@@ -22,11 +22,6 @@ app.get('/',(req,res)=>{
 
 
 
-
-app.listen(process.env.PORT, () => {
-  console.log(`Example app listening on port ${process.env.PORT}!`)
-});
-
 // 404 route handler
 app.use((req,res)=>{
   res.status(404).json({success:false,message:`Not found`})
@@ -36,3 +31,8 @@ app.use((req,res)=>{
 app.use((err,req,res,next)=>{
   res.json({success:false,error: err,message:err.message })
 })
+
+
+app.listen(process.env.PORT, () => {
+  console.log(`Example app listening on port ${process.env.PORT}!`)
+});
