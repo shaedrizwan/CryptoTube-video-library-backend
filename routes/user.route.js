@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/user.model")
 const {checkUser, verifyAuth} = require("../middlewares/auth.middleware")
 const jwt = require("jsonwebtoken")
+const bcrypt = require("bcryptjs")
 
 router.use('/login',checkUser)
 router.route("/login")
@@ -18,6 +19,9 @@ router.route('/signup')
     .post( async (req,res)=>{
         try{
             const user = req.body;
+            const salt = await bcrypt.genSalt(10)
+            const hashedPassword = await bcrypt.hash(user.password,salt)
+            user.password = hashedPassword
             const newUser = new User(user)
             const updatedUser = await newUser.save()
             res.json({sucess:true,message:"Sign up successful",username:updatedUser.username})
@@ -29,7 +33,8 @@ router.route('/signup')
 
 
 
-router.use('/addToWatchlater',verifyAuth)
+router.use(verifyAuth)
+
 
 router.route('/addToWatchlater')
     .post(async (req,res)=>{
@@ -48,7 +53,6 @@ router.route('/addToWatchlater')
     })
 
 
-router.use('/watchlater',verifyAuth)
 router.route('/watchlater')
     .get(async (req,res)=>{
         try{
@@ -61,7 +65,7 @@ router.route('/watchlater')
         }
     })
 
-router.use('/removeFromWatchlater',verifyAuth)
+
 router.route('/removeFromWatchLater')
     .post(async(req,res)=>{
         try{
@@ -79,7 +83,6 @@ router.route('/removeFromWatchLater')
     })
 
 
-router.use('/likedvideos',verifyAuth)
 router.route('/likedvideos')
     .get(async (req,res)=>{
         try{
@@ -91,8 +94,6 @@ router.route('/likedvideos')
         }
     })
 
-
-router.use('/addToLikedVideos',verifyAuth)
 
 router.route('/addToLikedVideos')
     .post(async (req,res)=>{
@@ -110,7 +111,7 @@ router.route('/addToLikedVideos')
         }
     })
 
-router.use('/removeFromLikedVideos',verifyAuth)
+
 router.route('/removeFromLikedVideos')
     .post(async(req,res)=>{
         try{
@@ -127,8 +128,6 @@ router.route('/removeFromLikedVideos')
         }
     })
 
-
-router.use('/createPlaylist',verifyAuth)
 
 router.route('/createPlaylist')
     .post(async (req,res)=>{
@@ -149,7 +148,6 @@ router.route('/createPlaylist')
         }
     })
 
-router.use('/addToPlaylist',verifyAuth)
 
 router.route('/addToPlaylist')
     .post(async(req,res)=>{
@@ -165,7 +163,7 @@ router.route('/addToPlaylist')
         }
     })
 
-router.use('/playlist',verifyAuth)
+
 router.route('/playlist')
     .get(async(req,res)=>{
         try{
@@ -176,7 +174,6 @@ router.route('/playlist')
             res.json({success:false,message:"Something went wrong",error:err.message})
         }
     })
-
 
 
 

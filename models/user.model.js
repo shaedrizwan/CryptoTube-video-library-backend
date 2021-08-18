@@ -10,7 +10,7 @@ const playlistSchema = new Schema({
 })
 
 const userSchema = new Schema({
-    firstname:{
+    firstName:{
         type: String,
         required:["First name required"]
     },
@@ -32,17 +32,6 @@ const userSchema = new Schema({
     watchlater:[{ type: Schema.Types.ObjectId, ref: Video }],
     likedvideos:[{ type: Schema.Types.ObjectId, ref: Video }],
     playlist:[playlistSchema]
-})
-
-userSchema.pre('save',async function (next){
-    try{
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(this.password,salt);
-        this.password = hashedPassword;
-        next()
-    }catch(err){
-        next(err)
-    }
 })
 
 module.exports = mongoose.model("User",userSchema)
