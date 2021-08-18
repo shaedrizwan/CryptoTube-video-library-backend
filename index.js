@@ -21,15 +21,15 @@ app.get('/',(req,res)=>{
 })
 
 
+// Error Handler
+app.use((err,req,res,next)=>{
+  res.json({success:false,error: err,message:err.message })
+})
+
 
 // 404 route handler
 app.use((req,res)=>{
   res.status(404).json({success:false,message:`Not found`})
-})
-
-// Error Handler
-app.use((err,req,res,next)=>{
-  res.json({success:false,error: err,message:err.message })
 })
 
 

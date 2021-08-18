@@ -24,6 +24,9 @@ const videoSchema = new Schema({
     },
     published_date:{
         type: String
+    },
+    channel_thumbnail:{
+        type:String
     }
 },{
     timestamps:true
