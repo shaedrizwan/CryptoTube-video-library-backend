@@ -149,6 +149,22 @@ router.route('/createPlaylist')
     })
 
 
+router.route('/removePlaylist')
+    .post(async(req,res)=>{
+        try{
+            const userId = req.user
+            const {playlistName} = req.body
+            const user = await User.findById(userId)
+            const index = user.playlist.findIndex(a => a.playlistName === playlistName)
+            user.playlist.splice(index,1)
+            const updatedPlaylist = await user.save()
+            res.json({success:true,message:"Playlist removed successfully"})
+        }catch(err){
+            res.json({success:false,message:err.message})
+        }
+    })
+
+
 router.route('/addToPlaylist')
     .post(async(req,res)=>{
         try{
