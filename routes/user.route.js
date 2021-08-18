@@ -180,6 +180,22 @@ router.route('/addToPlaylist')
     })
 
 
+router.route('/removeFromPlaylist')
+    .post(async(req,res)=>{
+        try{
+            const userId = req.user
+            const {playlistName,videoId} = req.body
+            const user = await User.findById(userId)
+            const index = user.playlist.findIndex(a => a.playlistName === playlistName)
+            const update = user.playlist[index].videos.pull(videoId)
+            const updatedPlaylist = await user.save()
+            res.json({success:true,message:"Video successfully removed from the playlist"})
+        }catch(err){
+            res.json({success:false,message:err.message})
+        }
+    })
+
+
 router.route('/playlist')
     .get(async(req,res)=>{
         try{
