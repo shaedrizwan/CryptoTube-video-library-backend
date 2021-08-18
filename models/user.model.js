@@ -23,7 +23,8 @@ const userSchema = new Schema({
     },
     username:{
         type:String,
-        required:["Username required"]
+        required:["Username required"],
+        unique:["Username must be unique"]
     },
     password:{
         type:String,
