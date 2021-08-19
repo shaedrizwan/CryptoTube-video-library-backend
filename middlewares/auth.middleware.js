@@ -30,7 +30,7 @@ const verifyAuth = (req,res,next) =>{
         req.user = decoded.userId;
         return next();
     } catch(err){
-        return res.json({success:false,message:"Unauthorized access"})
+        return res.status(401).json({success:false,message:"Unauthorized access"})
     }
 }
 
