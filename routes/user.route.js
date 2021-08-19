@@ -9,7 +9,6 @@ router.use('/login',checkUser)
 router.route("/login")
     .post((req,res)=>{
         const user = req.user;
-        console.log(user)
         const token = jwt.sign({userId:user._id},process.env.TOKEN_SECRET,{expiresIn:'24h'})
         res.json({success:true,user:user.username,token})
     })
@@ -57,7 +56,6 @@ router.route('/watchlater')
     .get(async (req,res)=>{
         try{
             userId = req.user
-            console.log(req.user)
             fullUser = await User.findOne({_id:userId}).populate('watchlater')
             res.json({success:true,watchlater:fullUser.watchlater})
         }catch(err){
@@ -171,7 +169,11 @@ router.route('/addToPlaylist')
             const userId = req.user;
             const {playlist,videoId} = req.body
             user = await User.findOne({_id:userId})
-            upUser = user.playlist.find(item=>item.playlistName === playlist).videos.push(videoId)
+            const selectedPlaylist = user.playlist.find(item=>item.playlistName === playlist)
+            const isPresent = selectedPlaylist.videos.find(id => String(id) === videoId)
+            if(!isPresent){
+                upUser = user.playlist.find(item=>item.playlistName === playlist).videos.push(videoId)
+            }
             updatedUser = await user.save()
             res.json({success:true,message:"Video added to playlist"})
         }catch(err){
